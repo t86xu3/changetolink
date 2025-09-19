@@ -21,12 +21,18 @@
       // 3. 根據傳入的 link 參數，組合出三種平台的連結
       const fullAffiliateUrl = "https://" + targetLink;
       const desktopUrl = fullAffiliateUrl;
-      const androidUrl = "intent://" + targetLink + "#Intent;scheme=https;end";
+      const iosUrl = "googlechromes://" + targetLink; // 強制呼叫 Chrome 以 "越獄"
+      const androidUrl = "intent://" + targetLink + "#Intent;scheme=https;end"; // 通用版 Intent
 
       // 4. 執行我們最穩定版本的跳轉邏輯
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
       if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        window.location.replace(fullAffiliateUrl);
+        // 優先嘗試用 Chrome 打開，這是最可靠的 "越獄" 方式
+        window.location.replace(iosUrl);
+        // 設定 B 計畫：1.5秒後如果還沒成功，就用預設瀏覽器打開，確保點擊不遺失
+        setTimeout(function () {
+          window.location.replace(desktopUrl);
+        }, 1500);
       } 
       else if (/android/i.test(userAgent)) {
         window.location.replace(androidUrl);
