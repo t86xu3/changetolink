@@ -1,1 +1,45 @@
 
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>正在帶您前往...</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding-top: 50px; }
+  </style>
+  <script type="text/javascript">
+    function smartRedirect() {
+      
+      // --- 你的連結 (這部分不用動) ---
+      const desktopUrl = "https://shopee.tw/product/9649539/23918804928/";
+      const iosUrl = "shopeetw://product/9649539/23918804928/";
+      const androidUrl = "intent://shopee.tw/product/9649539/23918804928/#Intent;scheme=https;package=com.shopee.tw;end";
+      // ---------------------------------------------
+
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        window.location.replace(iosUrl);
+        setTimeout(function () {
+          window.location.replace(desktopUrl);
+        }, 1500);
+      } 
+      else if (/android/i.test(userAgent)) {
+        window.location.replace(androidUrl);
+      } 
+      else {
+        window.location.replace(desktopUrl);
+      }
+    }
+
+    // 【修改點】我們不再等待 onload 事件，直接執行！
+    smartRedirect();
+
+  </script>
+</head>
+<body>
+  <h1>正在為您跳轉，請稍候...</h1>
+  <p>如果頁面沒有反應，請確認您已安裝對應的 App。</p>
+</body>
+</html>
