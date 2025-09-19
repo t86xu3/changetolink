@@ -1,25 +1,31 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>正在帶您前往...</title>
-  <style>
-    body { font-family: sans-serif; text-align: center; padding-top: 50px; }
-  </style>
   <script type="text/javascript">
     function smartRedirect() {
       
-      // --- 你的連結 (這部分不用動) ---
-      const desktopUrl = "https://shopee.tw/product/9649539/23918804928/";
-      const iosUrl = "shopeetw://product/9649539/23918804928/";
-      const androidUrl = "intent://shopee.tw/product/9649539/23918804928/#Intent;scheme=https;package=com.shopee.tw;end";
-      // ---------------------------------------------
+      // --- 這是我們要讓外部瀏覽器開啟的「聯盟行銷網址」---
+      const affiliateShortUrl = "s.shopee.tw/803P6Vz1Oh";
+      const fullAffiliateUrl = "https://s.shopee.tw/803P6Vz1Oh";
+      
+      // --- 組合出「強制用外部瀏覽器開啟聯盟行銷網址」的指令 ---
+      // 電腦版：直接打開聯盟行銷網址
+      const desktopUrl = fullAffiliateUrl;
+
+      // iOS版：嘗試用 Chrome 打開聯盟行銷網址 (如果使用者有裝Chrome)
+      const iosUrl = "googlechromes://" + affiliateShortUrl;
+
+      // Android版：用 Intent 強制以 Chrome 打開聯盟行銷網址
+      const androidUrl = "intent://" + affiliateShortUrl + "#Intent;scheme=https;package=com.android.chrome;end";
+      // ----------------------------------------------------------------
 
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
       if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        // 在iOS上，我們先嘗試用Chrome打開，如果失敗(沒裝Chrome)，就用預設瀏覽器打開
         window.location.replace(iosUrl);
         setTimeout(function () {
           window.location.replace(desktopUrl);
@@ -33,13 +39,19 @@
       }
     }
 
-    // 【修改點】我們不再等待 onload 事件，直接執行！
+    // 立刻執行
     smartRedirect();
 
   </script>
 </head>
 <body>
-  <h1>正在為您跳轉，請稍候...</h1>
-  <p>如果頁面沒有反應，請確認您已安裝對應的 App。</p>
+  <p style="text-align: center; padding-top: 50px;">
+    正在為您跳轉... <br/><br/>
+    如果頁面沒有反應，請<a id="fallback-link" href="#">點擊這裡</a>繼續。
+  </p>
+  <script>
+    // 動態設定備用連結的網址
+    document.getElementById('fallback-link').href = "https://s.shopee.tw/803P6Vz1Oh";
+  </script>
 </body>
 </html>
