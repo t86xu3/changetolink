@@ -12,24 +12,17 @@
       const fullAffiliateUrl = "https://s.shopee.tw/803P6Vz1Oh";
       
       // --- 組合出「強制用外部瀏覽器開啟聯盟行銷網址」的指令 ---
-      // 電腦版：直接打開聯盟行銷網址
       const desktopUrl = fullAffiliateUrl;
-
-      // iOS版：嘗試用 Chrome 打開聯盟行銷網址 (如果使用者有裝Chrome)
-      const iosUrl = "googlechromes://" + affiliateShortUrl;
-
-      // Android版：用 Intent 強制以 Chrome 打開聯盟行銷網址
       const androidUrl = "intent://" + affiliateShortUrl + "#Intent;scheme=https;package=com.android.chrome;end";
       // ----------------------------------------------------------------
 
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
+      // 【iPhone Safari 優化點】
+      // 我們不再強制指定 Chrome，而是直接使用標準的 https 連結。
+      // 讓 iOS 的「通用連結」機制自己去判斷要用 Safari 開啟，還是直接開啟 App。
       if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        // 在iOS上，我們先嘗試用Chrome打開，如果失敗(沒裝Chrome)，就用預設瀏覽器打開
-        window.location.replace(iosUrl);
-        setTimeout(function () {
-          window.location.replace(desktopUrl);
-        }, 1500);
+        window.location.replace(fullAffiliateUrl);
       } 
       else if (/android/i.test(userAgent)) {
         window.location.replace(androidUrl);
@@ -47,11 +40,7 @@
 <body>
   <p style="text-align: center; padding-top: 50px;">
     正在為您跳轉... <br/><br/>
-    如果頁面沒有反應，請<a id="fallback-link" href="#">點擊這裡</a>繼續。
+    如果頁面沒有反應，請<a id="fallback-link" href="https://s.shopee.tw/803P6Vz1Oh">點擊這裡</a>繼續。
   </p>
-  <script>
-    // 動態設定備用連結的網址
-    document.getElementById('fallback-link').href = "https://s.shopee.tw/803P6Vz1Oh";
-  </script>
 </body>
 </html>
