@@ -6,31 +6,27 @@
 </head>
 <body>
   <script type="text/javascript">
-    try {
-      // 從網址讀取由 Cloudflare Worker 傳來的指令
-      const params = new URLSearchParams(window.location.search);
-      const destination = params.get('destination'); // A 計畫目的地
-      const fallback = params.get('fallback');       // B 計畫目的地
+    // 我們將整個邏輯包在 window.onload 裡，確保頁面完全準備就緒
+    window.onload = function() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const destination = params.get('destination');
 
-      if (destination) {
-        // 如果有 B 計畫 (專為 iPhone 沒裝 Chrome 的情況設計)
-        if (fallback) {
+        if (destination) {
+          // 【擬真化核心】
+          // 我們在這裡加入一個 50 毫秒的微小延遲
           setTimeout(function() {
-            // 1.5 秒後如果還沒跳轉，就執行 B 計畫
-            window.location.replace(fallback);
-          }, 1500); 
+            const link = document.createElement('a');
+            link.href = destination;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+          }, 50); // 50 毫秒的延遲
         }
-        
-        // 優先執行 A 計畫：模擬點擊主要目的地
-        const link = document.createElement('a');
-        link.href = destination;
-        link.style.display = 'none';
-        document.body.appendChild(link);
-        link.click();
+      } catch (e) {
+        document.body.innerHTML = 'An error occurred during redirection.';
       }
-    } catch (e) {
-      document.body.innerHTML = 'An error occurred during redirection.';
-    }
+    };
   </script>
 </body>
 </html>
