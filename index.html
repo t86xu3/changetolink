@@ -1,65 +1,30 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>正在帶您前往...</title>
+  <title>Redirecting...</title>
   <script type="text/javascript">
-    function smartRedirect() {
-      // 1. 從當前網址中讀取 'link' 參數
+    try {
+      // 從網址讀取由 Cloudflare Worker 傳來的最終目的地
       const params = new URLSearchParams(window.location.search);
-      const targetLink = params.get('link');
-      
-      // 2. 如果網址中沒有提供 link 參數，就跳轉到一個預設的頁面
-      if (!targetLink) {
-        // --- !重要! 請把底下換成你的蝦皮賣場首頁或一個預設的推廣連結 ---
-        const defaultUrl = "https://shopee.tw/universal-link"; 
-        window.location.replace(defaultUrl);
-        return;
-      }
-      
-      // 3. 根據傳入的 link 參數，組合出三種平台的連結
-      const fullAffiliateUrl = "https://" + targetLink;
-      const desktopUrl = fullAffiliateUrl;
-      const iosUrl = "googlechromes://" + targetLink; // 強制呼叫 Chrome 以 "越獄"
-      const androidUrl = "intent://" + targetLink + "#Intent;scheme=https;end"; // 通用版 Intent
+      const destination = params.get('destination');
 
-      // 4. 執行我們最穩定版本的跳轉邏輯
-      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        // 優先嘗試用 Chrome 打開，這是最可靠的 "越獄" 方式
-        window.location.replace(iosUrl);
-        // 設定 B 計畫：1.5秒後如果還沒成功，就用預設瀏覽器打開，確保點擊不遺失
-        setTimeout(function () {
-          window.location.replace(desktopUrl);
-        }, 1500);
-      } 
-      else if (/android/i.test(userAgent)) {
-        window.location.replace(androidUrl);
-      } 
-      else {
-        window.location.replace(desktopUrl);
+      if (destination) {
+        // 建立一個看不見的連結
+        const link = document.createElement('a');
+        link.href = destination;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        
+        // 用程式碼模擬「人類」點擊這個連結！
+        link.click();
       }
+    } catch (e) {
+      // 預防萬一的錯誤處理
+      document.body.innerHTML = 'An error occurred during redirection.';
     }
-
-    smartRedirect();
   </script>
 </head>
 <body>
-  <p style="text-align: center; padding-top: 50px;">
-    正在為您跳轉... <br/><br/>
-    如果頁面沒有反應，請<a id="fallback-link" href="#">點擊這裡</a>繼續。
-  </p>
-  <script>
-    // 動態設定備用連結的網址，以防跳轉失敗
-    const params = new URLSearchParams(window.location.search);
-    const targetLink = params.get('link');
-    if (targetLink) {
-      document.getElementById('fallback-link').href = "https://" + targetLink;
-    } else {
-      // --- !重要! 這裡也要換成跟上面一樣的預設連結 ---
-      document.getElementById('fallback-link').href = "https://shopee.tw/universal-link";
-    }
-  </script>
 </body>
 </html>
