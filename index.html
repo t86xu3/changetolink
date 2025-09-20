@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Redirecting...</title>
+</head>
+<body>
+  <!-- 將 script 移到 body 的結尾，確保 body 已經載入完成 -->
   <script type="text/javascript">
     try {
       // 從網址讀取由 Cloudflare Worker 傳來的最終目的地
@@ -24,7 +27,5 @@
       document.body.innerHTML = 'An error occurred during redirection.';
     }
   </script>
-</head>
-<body>
 </body>
 </html>
